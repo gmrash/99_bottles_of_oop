@@ -1,10 +1,10 @@
 class Bottles
   def song
-    verses(99,0)
+    verses(99, 0)
   end
 
   def verses(upper, lower)
-    upper.downto(lower).collect {|i| verse(i)}.join("\n")
+    upper.downto(lower).collect { |i| verse(i) }.join("\n")
   end
 
   def verse(number)
@@ -12,9 +12,9 @@ class Bottles
     next_bottle_number = BottleNumber.new(bottle_number.successor)
 
     "#{bottle_number.quantity.capitalize} #{bottle_number.container} of beer on the wall, " +
-    "#{bottle_number.quantity} #{bottle_number.container} of beer.\n" +
-    "#{bottle_number.action}, " +
-    "#{next_bottle_number.quantity} #{next_bottle_number.container} of beer on the wall.\n"
+      "#{bottle_number.quantity} #{bottle_number.container} of beer.\n" +
+      "#{bottle_number.action}, " +
+      "#{next_bottle_number.quantity} #{next_bottle_number.container} of beer on the wall.\n"
   end
 end
 
@@ -26,38 +26,58 @@ class BottleNumber
   end
 
   def quantity
+    Quantity.new.call(number)
+  end
+
+  def container
+    Container.new.call(number)
+  end
+
+  def action
+    Action.new.call(number)
+  end
+
+  def pronoun
+    Pronoun.new.call(number)
+  end
+
+  def successor
+    Successor.new.call(number)
+  end
+end
+
+class Quantity
+  def call(number)
     if number == 0
       "no more"
     else
       number.to_s
     end
   end
+end
 
-  def container
+class Container
+  def call(number)
     if number == 1
       "bottle"
     else
       "bottles"
     end
   end
+end
 
-  def action
-    if number == 0
-      "Go to the store and buy some more"
-    else
-      "Take #{pronoun} down and pass it around"
-    end
-  end
-
-  def pronoun
+class Pronoun
+  def call(number)
     if number == 1
       "it"
     else
       "one"
     end
   end
+end
 
-  def successor
+class Successor
+  def call(number)
     if number == 0
       99
     else
@@ -66,23 +86,12 @@ class BottleNumber
   end
 end
 
-
-number0 = {
-  quantity: "no more",
-  successor: 99,
-  container: bottles,
-  pronoun: "one",
-  action: "Go to the store and buy some more"
-}
-
-class BottleNumberBuilder
-  attr_reader :quantity, :successor, :container, :pronoun, :action
-
-  def initialize(args)
-    @quantity = args[:quantity]
-    @successor = args[:successor]
-    @container = args[:container]
-    @quantity = args[:pronoun]
-    @action = args[:action]
+class Action
+  def call(number)
+    if number == 0
+      "Go to the store and buy some more"
+    else
+      "Take #{Pronoun.new.call(number)} down and pass it around"
+    end
   end
 end
