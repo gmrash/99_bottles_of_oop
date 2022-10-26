@@ -65,3 +65,24 @@ class BottleNumber
     end
   end
 end
+
+
+number0 = {
+  quantity: "no more",
+  successor: 99,
+  container: bottles,
+  pronoun: "one",
+  action: "Go to the store and buy some more"
+}
+
+class BottleNumberBuilder
+  attr_reader :quantity, :successor, :container, :pronoun, :action
+
+  def initialize(args)
+    @quantity = args[:quantity]
+    @successor = args[:successor]
+    @container = args[:container]
+    @quantity = args[:pronoun]
+    @action = args[:action]
+  end
+end
